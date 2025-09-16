@@ -37,6 +37,12 @@ class TzKTRewardApiImpl(RewardApi):
         # if we query a past cycle then we set the potential_endorsement_rewards with the
         # actual endorsement reward for consistency with other reward apis
         # But after cycle ran, we never pay estimates, so this value will not be used.
+        split["endorsementRewards"] = (
+            split["endorsementRewardsDelegated"]
+            + split["endorsementRewardsStakedOwn"]
+            + split["endorsementRewardsStakedEdge"]
+            + split["endorsementRewardsStakedShared"]
+        )
         potential_endorsement_rewards = (
             split["futureEndorsementRewards"]
             if self.api.get_current_cycle() <= cycle

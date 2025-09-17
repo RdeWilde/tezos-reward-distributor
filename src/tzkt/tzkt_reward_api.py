@@ -81,7 +81,7 @@ class TzKTRewardApiImpl(RewardApi):
                 "delegated_balance": item["delegatedBalance"],
                 # FIXME: current_balance is deprecated and no longer accurate
                 # Instead, tzkt provides a boolean "empty" that can be used.
-                "current_balance": item["currentDelegatedBalance"],
+                "current_balance": item["delegatedBalance"],
             }
             for item in split["delegators"]
             if item["delegatedBalance"] > 0

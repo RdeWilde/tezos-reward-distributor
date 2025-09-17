@@ -37,6 +37,12 @@ class TzKTRewardApiImpl(RewardApi):
         # if we query a past cycle then we set the potential_endorsement_rewards with the
         # actual endorsement reward for consistency with other reward apis
         # But after cycle ran, we never pay estimates, so this value will not be used.
+        split["endorsementRewards"] = (
+            split["endorsementRewardsDelegated"]
+            + split["endorsementRewardsStakedOwn"]
+            + split["endorsementRewardsStakedEdge"]
+            + split["endorsementRewardsStakedShared"]
+        )
         potential_endorsement_rewards = (
             split["futureEndorsementRewards"]
             if self.api.get_current_cycle() <= cycle
@@ -75,10 +81,10 @@ class TzKTRewardApiImpl(RewardApi):
                 "delegated_balance": item["delegatedBalance"],
                 # FIXME: current_balance is deprecated and no longer accurate
                 # Instead, tzkt provides a boolean "empty" that can be used.
-                "current_balance": item["currentDelegatedBalance"],
+                "current_balance": item["delegatedBalance"],
             }
             for item in split["delegators"]
-            if item["balance"] > 0
+            if item["delegatedBalance"] > 0
         }
 
         return RewardProviderModel(
